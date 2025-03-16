@@ -6,11 +6,11 @@ import { gsap } from "gsap";
 import Shapes from "@/components/Shapes";
 import Bounded from "@/lib/Bounded";
 
-export default function Dashboard() {
+export default function Hero() {
   const component = useRef(null)
 
   useEffect(() => {
-    let ctx = gsap.context(() => { 
+    const ctx = gsap.context(() => { 
       const tl = gsap.timeline();
       tl.fromTo(".name-animation", {
         x: -100, 
