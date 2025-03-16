@@ -7,14 +7,6 @@ import { NavMenu } from "@/components/NavMenu";
 import Bounded from "@/lib/Bounded";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother"
-
-// Extend Window interface to include ScrollSmoother
-declare global {
-  interface Window {
-    ScrollSmoother: typeof ScrollSmoother;
-  }
-}
 
 
 const tocItems: TOCItem[] = [
@@ -80,38 +72,25 @@ const tocItems: TOCItem[] = [
 
 export default function Page() {
   useEffect(() => {
-    // Register ScrollSmoother plugin
-    gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
-
-    // Create ScrollSmoother instance and make it globally accessible
-    const smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 2,
-      effects: true, 
-    });
-    
-    // Make ScrollSmoother globally accessible
-    window.ScrollSmoother = ScrollSmoother;
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
 
     return () => {
-      // Clean up ScrollSmoother on component unmount
-      smoother.kill();
+      // Clean up ScrollTrigger on component unmount
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
 
   return (
     <main className="container mx-auto min-h-screen p-4 md:p-8">
-      <div id="smooth-wrapper">
-        {/* Navigation Menu - Outside smooth-content to stay fixed */}
-        <NavMenu items={tocItems} />
-        
-        <div id="smooth-content">
-          <div id="hero">
+      {/* Navigation Menu */}
+      <NavMenu items={tocItems} />
+      
+      <div id="hero">
         <Hero/>
-        </div>
-          
-          <Bounded>
+      </div>
+        
+      <Bounded>
           <div className="mt-8 flex flex-col md:flex-row md:gap-12">
           
             <div className="w-full md:w-3/4">
@@ -183,9 +162,6 @@ export default function Page() {
             
           </div>
           </Bounded>
-        </div>
-      </div>
-      
     </main>
   );
 }
