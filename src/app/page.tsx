@@ -9,6 +9,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { ScrollSmoother } from "gsap-trial/ScrollSmoother"
 
+// Extend Window interface to include ScrollSmoother
+declare global {
+  interface Window {
+    ScrollSmoother: typeof ScrollSmoother;
+  }
+}
+
 
 const tocItems: TOCItem[] = [
   {
@@ -85,7 +92,7 @@ export default function Page() {
     });
     
     // Make ScrollSmoother globally accessible
-    (window as any).ScrollSmoother = ScrollSmoother;
+    window.ScrollSmoother = ScrollSmoother;
 
     return () => {
       // Clean up ScrollSmoother on component unmount
