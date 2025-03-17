@@ -46,7 +46,7 @@ export default function StaticContentWireframe() {
                 <div className="text-xs bg-cyan-900/50 px-2 py-0.5 rounded text-cyan-300">every 60s</div>
               </div>
               <div className="text-xs text-center text-neutral-400">
-                Automatically checks for content changes and rebuilds only what's needed
+                Automatically checks for content changes and rebuilds only what&apos;s needed
               </div>
             </div>
 
