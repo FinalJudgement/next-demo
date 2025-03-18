@@ -78,7 +78,7 @@ export default function PresentationIntro() {
               <h3 className="text-2xl font-semibold text-white">The Complete Framework</h3>
               <p className="text-neutral-400">
                 Created by Vercel in 2016, Next.js has evolved from a simple server-side rendering solution to a
-                complete framework for building modern web applications. It's designed to enhance React with
+                complete framework for building modern web applications. It&apos;s designed to enhance React with
                 powerful features while maintaining a great developer experience.
               </p>
             </div>

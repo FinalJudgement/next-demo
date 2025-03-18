@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/jsx-no-comment-textnodes */
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import {
     Server,
     Database,
@@ -640,7 +642,7 @@ function FullStackIntegrationSection() {
                         Secure user authentication with NextAuth.js, supporting Entra ID, Google, and more
                     </p>
                     <div className="bg-neutral-900 p-2 rounded text-xs font-mono text-neutral-400 overflow-x-auto">
-                        <pre className="whitespace-pre-wrap break-all">import NextAuth from "next-auth"</pre>
+                        <pre className="whitespace-pre-wrap break-all">import NextAuth from &quot;next-auth&quot;</pre>
                     </div>
                 </div>
 
@@ -653,7 +655,7 @@ function FullStackIntegrationSection() {
                         Type-safe database operations with Prisma ORM for SQL Server, PostgreSQL, and more
                     </p>
                     <div className="bg-neutral-900 p-2 rounded text-xs font-mono text-neutral-400 overflow-x-auto">
-                        <pre className="whitespace-pre-wrap break-all">import {"{ prisma }"} from "@/lib/prisma"</pre>
+                        <pre className="whitespace-pre-wrap break-all">import {"{ prisma }"} from &quot;@/lib/prisma&quot;</pre>
                     </div>
                 </div>
 
@@ -666,7 +668,7 @@ function FullStackIntegrationSection() {
                         End-to-end type safety with tRPC for seamless frontend-backend integration
                     </p>
                     <div className="bg-neutral-900 p-2 rounded text-xs font-mono text-neutral-400 overflow-x-auto">
-                        <pre className="whitespace-pre-wrap break-all">import {"{ trpc }"} from "@/utils/trpc"</pre>
+                        <pre className="whitespace-pre-wrap break-all">import {"{ trpc }"} from &quot;@/utils/trpc&quot;</pre>
                     </div>
                 </div>
             </div>
@@ -694,83 +696,6 @@ function DataFetchingStrategiesSection() {
                     <DataFetchingDemo />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                    <div className="bg-gradient-to-br from-blue-900/10 to-blue-800/5 rounded-xl overflow-hidden border border-blue-800/20 p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                                <Server className="h-5 w-5 text-blue-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white">Server Components</h3>
-                            </div>
-                        </div>
-                        <div className="bg-neutral-800/50 p-4 rounded-lg">
-                            <div className="font-mono text-xs text-neutral-300 overflow-x-auto">
-                                <pre>{`// app/dashboard/page.tsx
-import { prisma } from '@/lib/prisma'
-
-export default async function DashboardPage() {
-  // Data fetching happens directly in the component
-  const users = await prisma.user.findMany({
-    take: 5,
-    orderBy: { createdAt: 'desc' }
-  })
-  
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
-    </div>
-  )
-}`}</pre>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-cyan-900/10 to-cyan-800/5 rounded-xl overflow-hidden border border-cyan-800/20 p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                                <RefreshCw className="h-5 w-5 text-cyan-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white">Server Actions</h3>
-                            </div>
-                        </div>
-                        <div className="bg-neutral-800/50 p-4 rounded-lg">
-                            <div className="font-mono text-xs text-neutral-300 overflow-x-auto">
-                                <pre>{`// app/actions.ts
-'use server'
-
-import { prisma } from '@/lib/prisma'
-import { revalidatePath } from 'next/cache'
-
-export async function createPost(formData: FormData) {
-  const title = formData.get('title') as string
-  const content = formData.get('content') as string
-  const authorId = formData.get('authorId') as string
-  
-  if (!title || !authorId) {
-    throw new Error('Title and author are required')
-  }
-  
-  await prisma.post.create({
-    data: {
-      title,
-      content,
-      authorId
-    }
-  })
-  
-  revalidatePath('/blog')
-}`}</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
     )
@@ -933,44 +858,6 @@ export default function DataFetching() {
                             </div>
                         </div>
                     </div>
-                    <div className="relative">
-                        <div className="absolute -top-4 -left-4 right-4 bottom-4 bg-purple-900/20 rounded-lg"></div>
-                        <div className="relative bg-neutral-900 p-6 rounded-lg shadow-lg border border-neutral-800">
-                            <div className="flex items-center gap-2 mb-3">
-                                <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                                <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
-                                <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                                <div className="ml-2 text-sm text-neutral-400 font-mono">data-fetching.js</div>
-                            </div>
-                            <div className="bg-neutral-950 rounded-md p-4 font-mono text-sm text-neutral-300">
-                                <p className="text-blue-400">// Next.js offers multiple data fetching patterns</p>
-                                <p className="text-green-400">export async function getServerSideProps() {"{"}</p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-purple-400">// Runs on every request</span>
-                                </p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-yellow-400">const data = await fetch('https://api.example.com/data')</span>
-                                </p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-yellow-400">return {"{ props: { data } }"}</span>
-                                </p>
-                                <p className="text-green-400">{"}"}</p>
-                                <p className="text-neutral-300 mt-2"></p>
-                                <p className="text-blue-400">// App Router (React Server Components)</p>
-                                <p className="text-green-400">export default async function Page() {"{"}</p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-purple-400">// Data fetching directly in the component</span>
-                                </p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-yellow-400">const data = await fetch('https://api.example.com/data')</span>
-                                </p>
-                                <p className="text-neutral-300 pl-4">
-                                    <span className="text-yellow-400">return {"<div>{data.title}</div>"}</span>
-                                </p>
-                                <p className="text-green-400">{"}"}</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -991,11 +878,11 @@ export default function DataFetching() {
                 </div>
 
                 <div className="mb-16">
-                    <ApiRequestDemo />
+                    <ApiRoutesDemo />
                 </div>
 
                 <div className="mb-16">
-                    <ApiRoutesDemo />
+                    <ApiRequestDemo />
                 </div>
 
                 <FullStackIntegrationSection />
@@ -1053,7 +940,7 @@ export default function DataFetching() {
                                 <h4 className="text-lg font-medium text-white">Faster Development</h4>
                             </div>
                             <p className="text-sm text-neutral-300">
-                                By leveraging Next.js's built-in API routes and server-side features, teams save time that would
+                                By leveraging Next.js&apos;s built-in API routes and server-side features, teams save time that would
                                 otherwise be spent building and maintaining a separate backend.
                             </p>
                         </div>
