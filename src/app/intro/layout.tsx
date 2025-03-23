@@ -3,6 +3,7 @@ import { Urbanist } from "next/font/google";
 import { Providers } from '@/lib/providers';
 import Image from "next/image"
 import { Button } from '@/components/ui/button';
+import { HorizontalNavPill } from '@/components/horizontal-nav-pill';
 
 const urbanist = Urbanist({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
         <html lang="en" className="bg-slate-900 text-slate-100">
             <body className={urbanist.className} >
                 <Providers>
+                    <HorizontalNavPill />
                     <div className="flex min-h-screen flex-col bg-black text-neutral-200">
                         <header className="border-b border-neutral-800 bg-neutral-900/80 backdrop-blur-sm sticky top-0 z-10">
                             <div className="container flex h-16 items-center justify-between px-4">

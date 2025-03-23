@@ -328,33 +328,6 @@ export default function PresentationIntro() {
                 <p className="text-sm text-neutral-400">TypeScript, cloud services, and backend compatibility</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-900/20 text-purple-400">
-                8
-              </div>
-              <div>
-                <h3 className="font-medium text-white">Next.js & AI Integration</h3>
-                <p className="text-sm text-neutral-400">Building AI-powered applications</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-900/20 text-purple-400">
-                9
-              </div>
-              <div>
-                <h3 className="font-medium text-white">Developer Experience & Cost Efficiency</h3>
-                <p className="text-sm text-neutral-400">Productivity gains and operational benefits</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-900/20 text-purple-400">
-                10
-              </div>
-              <div>
-                <h3 className="font-medium text-white">Scalability & Future-Proofing</h3>
-                <p className="text-sm text-neutral-400">Enterprise-grade architecture considerations</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
