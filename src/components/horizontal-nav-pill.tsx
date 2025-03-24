@@ -4,7 +4,6 @@ import type React from "react"
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { motion } from "framer-motion"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Code, Database, Layers, Palette, Server, Home } from "lucide-react"
 
@@ -62,11 +61,8 @@ export function HorizontalNavPill() {
           <div className="relative">
             {/* Animated background for the active tick */}
             {activeIndex >= 0 && (
-              <motion.div
+              <div
                 className="absolute w-8 h-8 bg-purple-600 rounded-full -z-10"
-                initial={false}
-                animate={{ x: activeIndex * 40 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               />
             )}
 
