@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { type TOCItem } from "@/components/table-of-contents";
 import { NavMenu } from "@/components/NavMenu";
+import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import Hero from "@/components/Hero";
@@ -33,7 +34,7 @@ const tocItems: TOCItem[] = [
   },
   {
     id: "panel-5",
-    title: "Contact",
+    title: "Introduction",
     level: 1,
   },
 ]
@@ -47,116 +48,177 @@ export default function Page() {
   useEffect(() => {
     // Register the ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
- 
-    // Modified implementation with scrub for smoother animations
-    gsap.utils.toArray<HTMLElement>(".panel").forEach((panel, i) => {
-      // Create a timeline for each panel
-      const tl = gsap.timeline({
-        paused: true,
-        onComplete: () => {
-          // Ensure animation is fully complete before allowing scroll to continue
-          console.log(`Panel ${i} animation complete`);
-        }
-      });
-      
-      // Add the panel animation to the timeline
-      tl.to(panel, { y: 0, duration: 1 });
-      
-      ScrollTrigger.create({
-        trigger: panel,
-        start: "top top", // When the top of the panel reaches the top of the viewport
-        end: "+=100%", // Reduced from 150% to 100% to minimize over-scrolling
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.5, // Add smooth scrubbing for better scroll-linked animations
-        immediateRender: false, // Prevent initial rendering jumps
-        markers: false, // Set to true for debugging
-      });
+    
+    // Get all panels
+    const panels = gsap.utils.toArray<HTMLElement>(".panel");
+    
+    // Set up the container for scrolling
+    const totalPanels = panels.length;
+    gsap.set(".panels-container", { 
+      height: (totalPanels * 100) + "vh",
+      position: "relative"
     });
     
-    // Create simple fade in/out animations for shapes
+    // Set all panels to position: fixed to avoid flickering
+    gsap.set(panels, { 
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100vh",
+      overflow: "hidden"
+    });
+    
+    // Initially hide all panels except the first one
+    panels.forEach((panel, i) => {
+      if (i > 0) {
+        gsap.set(panel, { 
+          autoAlpha: 1,
+          y: "100vh", // Start below the viewport
+          zIndex: 10 + i // Ensure proper stacking
+        });
+      } else {
+        gsap.set(panel, { zIndex: 10 }); // First panel
+      }
+    });
+    
+    // Create a master timeline
+    const masterTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".panels-container",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1,
+        markers: false,
+        pin: false, // Don't pin the container
+        anticipatePin: 1
+      }
+    });
+    
+    // Add animations for each panel transition
+    panels.forEach((panel, i) => {
+      if (i < totalPanels - 1) {
+        const nextPanel = panels[i + 1];
+        const sectionTl = gsap.timeline();
+        
+        // Create a bidirectional animation that works when scrolling both up and down:
+        
+        sectionTl
+          // Animate the next panel from below when scrolling down
+          .fromTo(nextPanel, 
+            { y: "100vh" }, // Start position (below viewport)
+            { 
+              y: "0vh", // End position (in viewport)
+              ease: "power2.out", 
+              duration: 0.7
+            }, 
+            0
+          )
+          // Move the current panel up when scrolling down
+          .to(panel, { 
+            y: "-100vh", // Move up and out of view when scrolling down
+            ease: "power2.in",
+            duration: 0.5
+          }, 0.6); // Start slightly before the next panel is fully in
+        
+        // Add section timeline to master timeline
+        masterTimeline.add(sectionTl, i);
+        
+        // Add individual ScrollTriggers for each panel to handle reverse animations
+        if (i > 0) {
+          ScrollTrigger.create({
+            trigger: `#panel-${i}`,
+            start: "top 80%", // When this panel reaches 80% from the top
+            onEnterBack: () => {
+              // When scrolling back up to this panel, animate it back down into view
+              gsap.to(panel, {
+                y: "0vh", // Move back to original position
+                duration: 0.5,
+                ease: "power2.out"
+              });
+              
+              // Move the next panel back down below the viewport
+              gsap.to(nextPanel, {
+                y: "100vh",
+                duration: 0.5,
+                ease: "power2.in"
+              });
+            },
+            markers: false
+          });
+        }
+      }
+    });
+    
+    // Create animations for shapes that are synchronized with panel transitions
     // Features panel (panel-2) shapes
     if (pillContainerRef.current && diamondContainerRef.current) {
       // Set initial state - hidden
-      gsap.set(pillContainerRef.current, { autoAlpha: 0 });
-      gsap.set(diamondContainerRef.current, { autoAlpha: 0 });
+      gsap.set(pillContainerRef.current, { autoAlpha: 0, scale: 0 });
+      gsap.set(diamondContainerRef.current, { autoAlpha: 0, scale: 0 });
       
-      // Pop in for pill shape with elastic effect
+      // Directly animate shapes when panel-2 is in view
       ScrollTrigger.create({
         trigger: "#panel-2",
-        start: "top top", // Start when the top of panel-2 reaches the bottom of viewport
+        start: "top 80%", // When panel-2 reaches the top of the viewport
         onEnter: () => {
-          // Set initial state before animation
-          gsap.set(pillContainerRef.current, { 
-            autoAlpha: 0,
-            scale: 0
-          });
-          
-          // Animate with elastic pop effect
+          // Animate pill shape immediately
           gsap.to(pillContainerRef.current, { 
-            autoAlpha: 1,
-            scale: .8,
-            duration: 2,
+            autoAlpha: 1, 
+            scale: 0.8,
+            duration: 1,
             ease: "elastic.out(1,0.3)",
-          });
-        },
-        onLeaveBack: () => {
-          gsap.to(pillContainerRef.current, { 
-            autoAlpha: 0,
-            scale: 0.5,
-            duration: 0.5,
-            ease: "power2.in"
-          });
-        },
-        markers: false
-      });
-      
-      // Pop in for diamond shape with slight delay
-      ScrollTrigger.create({
-        trigger: "#panel-2",
-        start: "top top", // Start slightly after pill shape
-        onEnter: () => {
-          // Set initial state before animation
-          gsap.set(diamondContainerRef.current, { 
-            autoAlpha: 0,
-            scale: 0
+            delay: 0.2 // Small delay after panel is in view
           });
           
-          // Animate with elastic pop effect
+          // Animate diamond shape with a slight delay
           gsap.to(diamondContainerRef.current, { 
-            autoAlpha: 1,
+            autoAlpha: 1, 
             scale: 1,
-            duration: 2,
-            delay:.5,
-            ease: "elastic.out(1,0.3)",
+            duration: 1,
+            delay: 0.5, // Slightly longer delay for staggered effect
+            ease: "elastic.out(1,0.3)"
           });
         },
         onLeaveBack: () => {
-          gsap.to(diamondContainerRef.current, { 
-            autoAlpha: 0,
-            scale: 0.5,
-            duration: 0.5,
-            ease: "power2.in"
-          });
-        },
-        markers: false
-      });
-      
-      // Simple fade out when leaving panel
-      ScrollTrigger.create({
-        trigger: "#panel-2",
-        start: "bottom center", // Start when the bottom of panel-2 reaches the center of viewport
-        end: "bottom top", // End when the bottom of panel-2 leaves the top of viewport
-        onEnter: () => {
+          // Hide shapes when scrolling back up
           gsap.to([pillContainerRef.current, diamondContainerRef.current], { 
             autoAlpha: 0, 
-            duration: 0.5,
+            scale: 0.5,
+            duration: 0.3,
+            ease: "power2.in"
+          });
+        },
+        markers: false
+      });
+      
+      // Hide shapes when scrolling to the next panel
+      ScrollTrigger.create({
+        trigger: "#panel-3",
+        start: "top 80%", // When panel-3 is 80% from the top of the viewport
+        onEnter: () => {
+          // Hide panel-2 shapes when panel-3 starts to enter
+          gsap.to([pillContainerRef.current, diamondContainerRef.current], { 
+            autoAlpha: 0, 
+            scale: 0.5,
+            duration: 0.3,
+            ease: "power2.in"
           });
         },
         onLeaveBack: () => {
-          gsap.to([pillContainerRef.current, diamondContainerRef.current], { 
+          // Show panel-2 shapes again when scrolling back up from panel-3
+          gsap.to(pillContainerRef.current, { 
             autoAlpha: 1, 
+            scale: 0.8,
             duration: 0.5,
+            ease: "power2.out"
+          });
+          gsap.to(diamondContainerRef.current, { 
+            autoAlpha: 1, 
+            scale: 1,
+            duration: 0.5,
+            delay: 0.1,
+            ease: "power2.out"
           });
         },
         markers: false
@@ -166,59 +228,74 @@ export default function Page() {
     // Services panel (panel-3) shapes
     if (donutContainerRef.current) {
       // Set initial state - hidden
-      gsap.set(donutContainerRef.current, { autoAlpha: 0 });
+      gsap.set(donutContainerRef.current, { autoAlpha: 0, scale: 0 });
       
-      // Pop in for donut shape with elastic effect
+      // Directly animate shape when panel-3 is in view
       ScrollTrigger.create({
         trigger: "#panel-3",
-        start: "top top", // Start when the top of panel-3 reaches the bottom of viewport
-        end: "top center", // End when the top of panel-3 reaches the center of viewport
+        start: "top -20%", // When panel-3 reaches the top of the viewport
         onEnter: () => {
-          // Set initial state before animation
-          gsap.set(donutContainerRef.current, { 
-            autoAlpha: 0,
-            scale: 0,
-          });
-          
-          // Animate with elastic pop effect
+          // Animate donut shape immediately
           gsap.to(donutContainerRef.current, { 
-            autoAlpha: 1,
+            autoAlpha: 1, 
             scale: 1,
             duration: 1,
             ease: "elastic.out(1,0.3)",
+            delay: 0.2 // Small delay after panel is in view
           });
         },
         onLeaveBack: () => {
+          // Hide shape when scrolling back up
           gsap.to(donutContainerRef.current, { 
-            autoAlpha: 0,
+            autoAlpha: 0, 
             scale: 0.5,
-            duration: 0.5,
+            duration: 0.3,
             ease: "power2.in"
           });
         },
         markers: false
       });
       
-      // Simple fade out when leaving panel
+      // Hide shape when scrolling to the next panel
       ScrollTrigger.create({
-        trigger: "#panel-3",
-        start: "bottom center", // Start when the bottom of panel-3 reaches the center of viewport
-        end: "bottom top", // End when the bottom of panel-3 leaves the top of viewport
+        trigger: "#panel-4",
+        start: "top 80%", // When panel-4 is 80% from the top of the viewport
         onEnter: () => {
+          // Hide panel-3 shape when panel-4 starts to enter
           gsap.to(donutContainerRef.current, { 
             autoAlpha: 0, 
-            duration: 1.5
+            scale: 0.5,
+            duration: 0.3,
+            ease: "power2.in"
           });
         },
         onLeaveBack: () => {
+          // Show panel-3 shape again when scrolling back up from panel-4
           gsap.to(donutContainerRef.current, { 
             autoAlpha: 1, 
-            duration: 1.5
+            scale: 1.8,
+            duration: 0.5,
+            ease: "power2.out"
           });
         },
         markers: false
       });
     }
+    
+    // Add a special ScrollTrigger for the first panel to handle scrolling back to top
+    ScrollTrigger.create({
+      trigger: "#panel-1",
+      start: "top 80%", // When panel-1 is 80% from the top of the viewport
+      onEnterBack: () => {
+        // Reset the first panel when scrolling back to the top
+        gsap.to(panels[0], {
+          y: "0vh", // Move back to original position
+          duration: 0.5,
+          ease: "power2.out"
+        });
+      },
+      markers: false
+    });
     
     // Clean up all ScrollTriggers when component unmounts
     return () => {
@@ -248,7 +325,7 @@ export default function Page() {
         {/* Features Panel */}
         <section 
           id="panel-2" 
-          className="panel h-screen w-screen bg-purple-500 flex items-center justify-center relative overflow-hidden"
+          className="panel h-screen w-screen bg-purple-400 flex items-center justify-center relative overflow-hidden"
         >
           {/* Shapes positioned absolutely */}
           <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -293,7 +370,7 @@ export default function Page() {
         {/* Services Panel */}
         <section 
           id="panel-3" 
-          className="panel h-screen w-screen bg-green-500 flex items-center justify-center relative overflow-hidden"
+          className="panel h-screen w-screen bg-green-400 flex items-center justify-center relative overflow-hidden"
         >
           {/* Donut shape */}
           <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -324,7 +401,7 @@ export default function Page() {
         {/* Portfolio Panel */}
         <section 
           id="panel-4" 
-          className="panel h-screen w-screen bg-blue-500 flex items-center justify-center"
+          className="panel h-screen w-screen bg-blue-400 flex items-center justify-center"
         >
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white mb-6">Portfolio</h2>
@@ -348,21 +425,19 @@ export default function Page() {
         {/* Contact Panel */}
         <section 
           id="panel-5" 
-          className="panel h-screen w-screen bg-red-500 flex items-center justify-center"
+          className="panel h-screen w-screen bg-red-400 flex items-center justify-center"
         >
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-white mb-6">Contact</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">Introduction</h2>
             <div className="bg-white/20 p-8 rounded-lg backdrop-blur-sm max-w-md mx-auto">
-              <p className="text-white mb-4">Get in touch with us to discuss your project.</p>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-white font-bold">Email:</span>
-                  <span className="text-white">contact@example.com</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-white font-bold">Phone:</span>
-                  <span className="text-white">(123) 456-7890</span>
-                </div>
+            <p className="text-white mb-4">Without further ado, let’s begin our journey.</p>
+              <div className="mt-6">
+                <Link 
+                  href="/intro" 
+                  className="bg-white text-red-400 hover:bg-red-100 transition-colors px-6 py-3 rounded-lg font-bold shadow-lg"
+                >
+                  Start Introduction
+                </Link>
               </div>
             </div>
           </div>

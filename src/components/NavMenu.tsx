@@ -50,7 +50,7 @@ export function NavMenu({ items, className }: NavMenuProps) {
       <div className={cn("fixed top-6 right-6 lg:right-8 z-50 gsap-no-transform", className)}>
         <button
           onClick={toggleMenu}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/90 p-2 shadow-lg transition-all hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 backdrop-blur-sm"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-200 p-2 shadow-lg transition-all hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 backdrop-blur-sm"
           aria-label={isOpen ? "Close menu" : "Open menu"}
           aria-expanded={isOpen}
         >
@@ -84,33 +84,10 @@ export function NavMenu({ items, className }: NavMenuProps) {
         <div
           className={cn(
             "absolute right-0 top-16 w-72 max-h-[80vh] overflow-y-auto transform rounded-lg border bg-slate-900 p-6 shadow-xl transition-all duration-300 ease-in-out gsap-no-transform",
-            isOpen ? "translate-x-0 opacity-100" : "translate-x-4 opacity-0 pointer-events-none"
+            isOpen ? "translate-x-0 opacity-100 text-slate-200" : "translate-x-4 opacity-0 pointer-events-none"
           )}
           aria-hidden={!isOpen}
         >
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-semibold">Navigation</h4>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded-full hover:bg-slate-800 transition-colors"
-              aria-label="Close menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="h-5 w-5"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
           <TableOfContents 
             items={items} 
             className="" 
