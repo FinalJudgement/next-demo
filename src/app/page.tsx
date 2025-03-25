@@ -349,19 +349,11 @@ export default function Page() {
           
           {/* Content */}
           <div className="text-center z-10">
-            <h2 className="text-4xl font-bold text-white mb-6">Features</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-white mb-6">Presentation</h2>
+            <div className="gap-8 max-w-5xl mx-auto px-4">
               <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-                <h3 className="text-2xl font-bold text-white mb-3">Responsive Design</h3>
-                <p className="text-white/90">Fully responsive layouts that work on any device, big or small.</p>
-              </div>
-              <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-                <h3 className="text-2xl font-bold text-white mb-3">Modern UI</h3>
-                <p className="text-white/90">Clean and modern user interfaces built with the latest technologies.</p>
-              </div>
-              <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-                <h3 className="text-2xl font-bold text-white mb-3">Fast Performance</h3>
-                <p className="text-white/90">Optimized for speed and performance to provide the best user experience.</p>
+               <p className="text-white">Welcome to Our Next JS Presentation</p>
+               <p className="text-white"> We're going to be talking about some of the great benefits and inner workings of NextJS</p>
               </div>
             </div>
           </div>
@@ -384,15 +376,10 @@ export default function Page() {
             </div>
           </div>
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-white mb-6">Services</h2>
+            <h2 className="text-4xl font-bold text-white mb-6">Concepts</h2>
             <div className="flex flex-col md:flex-row gap-8 max-w-5xl mx-auto px-4">
               <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm flex-1">
-                <h3 className="text-2xl font-bold text-white mb-3">Web Development</h3>
-                <p className="text-white/90">Custom websites and web applications built with the latest technologies.</p>
-              </div>
-              <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm flex-1">
-                <h3 className="text-2xl font-bold text-white mb-3">UI/UX Design</h3>
-                <p className="text-white/90">Beautiful and intuitive user interfaces designed for the best user experience.</p>
+                <p className="text-white">We'll be going over Frontend, server, and API Concepts, and Show how you can make powerful and Beatiful apps quick and effectively.</p>
               </div>
             </div>
           </div>
@@ -404,19 +391,10 @@ export default function Page() {
           className="panel h-screen w-screen bg-blue-400 flex items-center justify-center"
         >
           <div className="text-center">
-            <h2 className="text-4xl font-bold text-white mb-6">Portfolio</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto px-4">
-              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex items-center justify-center">
-                <p className="text-xl font-bold text-white">Project 1</p>
-              </div>
-              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex items-center justify-center">
-                <p className="text-xl font-bold text-white">Project 2</p>
-              </div>
-              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex items-center justify-center">
-                <p className="text-xl font-bold text-white">Project 3</p>
-              </div>
-              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex items-center justify-center">
-                <p className="text-xl font-bold text-white">Project 4</p>
+            <h2 className="text-4xl font-bold text-white mb-6">Quiz</h2>
+            <div className="gap-6 max-w-4xl mx-auto px-4">
+              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex items-center justify-center ">
+                <p className="text-white">At the end of this presentation, We're going to take a quiz. The highest score gets the prize.</p>
               </div>
             </div>
           </div>
