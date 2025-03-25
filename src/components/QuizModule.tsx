@@ -1,5 +1,5 @@
 // QuizModule.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { quiz } from '../data/question-set';
 import ScoreCard from './Scorecard';
 
@@ -11,6 +11,8 @@ interface QuizResult {
   score: number;
   correctAnswers: number;
   wrongAnswers: number;
+  completionTimeMs: number;
+  startTime: number;
 }
 
 const QuizModule = ({ name }: QuizModuleProps) => {
@@ -23,7 +25,29 @@ const QuizModule = ({ name }: QuizModuleProps) => {
 		score: 0,
 		correctAnswers: 0,
 		wrongAnswers: 0,
+		completionTimeMs: 0,
+		startTime: Date.now(),
 	});
+	const [elapsedTime, setElapsedTime] = useState(0);
+	const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Start the timer when the component mounts
+	useEffect(() => {
+		const startTime = Date.now();
+		setQuizResult(prev => ({ ...prev, startTime }));
+		
+		// Update elapsed time every 100ms
+		timerRef.current = setInterval(() => {
+			setElapsedTime(Date.now() - startTime);
+		}, 100);
+		
+		// Clean up the timer when the component unmounts
+		return () => {
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+			}
+		};
+	}, []);
 
 	const { questions } = quiz;
 	const { question, answers, correctAnswer } = 
@@ -51,11 +75,27 @@ const QuizModule = ({ name }: QuizModuleProps) => {
 		if (currentQuestionIndex !== questions.length - 1) {
 			setCurrentQuestionIndex((prev) => prev + 1);
 		} else {
+			// Quiz is complete, stop the timer and calculate total time
+			if (timerRef.current) {
+				clearInterval(timerRef.current);
+			}
+			const completionTimeMs = Date.now() - quizResult.startTime;
+			setQuizResult(prev => ({ ...prev, completionTimeMs }));
 			setShowResults(true);
 		}
 		setSelectedAnswer('');
 		setSelectedAnswerIndex(null);
 		setAnswerChecked(false);
+	};
+
+	// Format time for display (mm:ss.ms)
+	const formatTime = (ms: number): string => {
+		const totalSeconds = ms / 1000;
+		const minutes = Math.floor(totalSeconds / 60);
+		const seconds = Math.floor(totalSeconds % 60);
+		const milliseconds = Math.floor((ms % 1000) / 10); // Get only 2 digits of ms
+
+		return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${milliseconds.toString().padStart(2, '0')}`;
 	};
 
 	return (
@@ -64,7 +104,12 @@ const QuizModule = ({ name }: QuizModuleProps) => {
 			<div>
 				{!showResults ? (
 					<div className='bg-white shadow-md rounded-lg p-4'>
-						<h4 className='text-xl font-semibold mb-4'>{question}</h4>
+						<div className='flex justify-between items-center mb-4'>
+							<h4 className='text-xl font-semibold'>{question}</h4>
+							<div className='text-gray-600 font-mono'>
+								Time: {formatTime(elapsedTime)}
+							</div>
+						</div>
 						<ul className='space-y-2'>
 							{answers.map((answer, idx) => (
 								<li
