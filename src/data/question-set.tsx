@@ -11,7 +11,7 @@ interface Quiz {
 }
 
 export const quiz: Quiz = {
-	const questions = [
+	 questions: [
 		{
 		  id: 1,
 		  question: 'What is the primary purpose of Next.js?',
