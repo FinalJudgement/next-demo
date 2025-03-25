@@ -9,7 +9,7 @@ export default function LeaderboardPage() {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="text-center mb-8">
         <h1 className='text-green-600 text-3xl font-bold mb-2'>
-          GeekForGeeks
+          NextQuiz
         </h1>
         <h3 className='text-xl text-gray-700 mb-4'>Quiz Leaderboard</h3>
         <p className='text-gray-600 mb-6'>

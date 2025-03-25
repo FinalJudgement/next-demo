@@ -12,7 +12,7 @@ export default function QuizPage() {
 		<div className="container mx-auto px-4 py-8 max-w-2xl">
 			<div className="text-center mb-8">
 				<h1 className='text-green-600 text-3xl font-bold mb-2'>
-					GeekForGeeks
+					NextQuiz
 				</h1>
 				<h3 className='text-xl text-gray-700 mb-4'>Quiz App</h3>
 				<div className="mb-6">
