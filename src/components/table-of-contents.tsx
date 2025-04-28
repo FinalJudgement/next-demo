@@ -28,15 +28,24 @@ export function TableOfContents({ items, activeId, className, onLinkClick }: Tab
     }
 
     const handleScroll = () => {
-      const headings = Array.from(document.querySelectorAll("h2[id], h3[id], h4[id], h5[id], h6[id]"))
-
-      const visibleHeadings = headings.filter((heading) => {
-        const rect = heading.getBoundingClientRect()
-        return rect.top >= 0 && rect.top <= 250
-      })
-
-      if (visibleHeadings.length > 0) {
-        setActiveHeading(visibleHeadings[0].id)
+      // Get all panels
+      const panels = Array.from(document.querySelectorAll(".panel"))
+      
+      // Calculate which panel should be active based on scroll position
+      const scrollPosition = window.scrollY
+      const windowHeight = window.innerHeight
+      
+      // Find the panel index based on scroll position
+      // Each panel is 100vh tall
+      const panelIndex = Math.round(scrollPosition / windowHeight)
+      
+      // Make sure we have a valid panel index
+      if (panelIndex >= 0 && panelIndex < panels.length) {
+        // Get the panel id and set it as active
+        const panelId = panels[panelIndex].id
+        if (panelId) {
+          setActiveHeading(panelId)
+        }
       }
     }
 
@@ -72,25 +81,24 @@ function Tree({ items, level = 1, activeHeading, onLinkClick }: TreeProps) {
             <Link
               href={`#${item.id}`}
               className={cn(
-                "inline-block no-underline transition-colors hover:text-foreground",
-                item.id === activeHeading ? "font-medium text-foreground" : "text-muted-foreground",
+                "inline-block no-underline transition-colors hover:text-slate-400",
+                item.id === activeHeading ? "font-medium text-amber-300" : " text-slate-200",
               )}
               onClick={(e) => {
                 e.preventDefault()
                 
-                // Get the target element
-                const targetElement = document.querySelector(`#${item.id}`);
+                // Get the target panel index from the id (e.g., "panel-2" -> 2)
+                const panelIndex = parseInt(item.id.split('-')[1]) - 1;
                 
-                if (targetElement) {
-                  // Get the element's position relative to the document
-                  const rect = targetElement.getBoundingClientRect();
-                  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                  const targetPosition = rect.top + scrollTop;
+                if (!isNaN(panelIndex)) {
+                  // Calculate the exact scroll position for this panel
+                  // Each panel is 100vh, so we multiply by the panel index
+                  const targetPosition = panelIndex * window.innerHeight - (35 * panelIndex);
                   
-                  // Scroll to the position
+                  // Scroll to the exact position of the panel
                   window.scrollTo({
                     top: targetPosition,
-                    behavior: 'smooth'
+                    behavior: 'smooth',
                   });
                 }
                 

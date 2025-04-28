@@ -2,7 +2,7 @@ import './globals.css';
 import { Urbanist } from "next/font/google";
 import { Providers } from '@/lib/providers';
 
-const urbanist = Urbanist({subsets: ["latin"] });
+const urbanist = Urbanist({ subsets: ["latin"] });
 
 
 
