@@ -2,11 +2,11 @@ name: Test
 on:
   push:
     branches:
-      - ryan
+      - main
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - ryan
+      - main
       
 jobs:
  build_and_deploy_job:
