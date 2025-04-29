@@ -351,9 +351,9 @@ export default function Page() {
           <div className="text-center z-10">
             <h2 className="text-4xl font-bold text-white mb-6">Presentation</h2>
             <div className="gap-8 max-w-5xl mx-auto px-4">
-              <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm">
-              <p className="text-white">Welcome to our deep dive into Next.js — a powerful, flexible framework for building the modern web.</p>
-              <p className="text-white mt-4">Throughout this session, we'll explore how Next.js helps developers build fast, scalable, and visually stunning applications with ease. Whether you're just starting or looking to sharpen your skills, you're in the right place.</p>
+              <div className="bg-white/20 p-8 rounded-lg backdrop-blur-sm max-w-md mx-auto">
+              <p className="text-xl text-white">Welcome to our deep dive into Next.js — a powerful, flexible framework for building the modern web.</p>
+              <p className="text-xl text-white mt-4">Throughout this session, we'll explore how Next.js helps developers build fast, scalable, and visually stunning applications with ease. Whether you're just starting or looking to sharpen your skills, you're in the right place.</p>
               </div>
             </div>
           </div>
@@ -378,13 +378,13 @@ export default function Page() {
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white mb-6">Concepts</h2>
             <div className="flex flex-col md:flex-row gap-8 max-w-5xl mx-auto px-4">
-              <div className="bg-white/20 p-6 rounded-lg backdrop-blur-sm flex-1">
-              <p className="text-white">
-                We'll break down the key concepts behind Frontend development, Server capabilities, and API creation — and show how Next.js brings them all together into one streamlined experience.
-              </p>
-              <p className="text-white mt-4">
-                You'll get a clearer view of how modern web apps can be built faster, with better structure, better performance, and much less friction.
-              </p>
+              <div className="bg-white/20 p-8 rounded-lg backdrop-blur-sm max-w-md mx-auto">
+                <p className="text-xl text-white">
+                  We'll break down the key concepts behind Frontend development, Server capabilities, and API creation — and show how Next.js brings them all together into one streamlined experience.
+                </p>
+                <p className="text-xl text-white mt-4">
+                  You'll get a clearer view of how modern web apps can be built faster, with better structure, better performance, and much less friction.
+                </p>
               </div>
             </div>
           </div>
@@ -398,12 +398,12 @@ export default function Page() {
           <div className="text-center">
             <h2 className="text-4xl font-bold text-white mb-6">Quiz</h2>
             <div className="gap-6 max-w-4xl mx-auto px-4">
-              <div className="bg-white/20 p-4 rounded-lg backdrop-blur-sm h-48 flex flex-col items-center justify-center">
-                <p className="text-white text-center">
+              <div className="bg-white/20 p-8 rounded-lg backdrop-blur-sm max-w-md mx-auto">
+                <p className="text-xl text-white text-center">
                   At the end of our presentation, it’s your turn to shine!<br/>
                   Test your knowledge in a quick, fun quiz — and remember, both your score and your time will matter.
                 </p>
-                <p className="text-white text-center mt-2">
+                <p className="text-xl text-white text-center mt-2">
                   The highest scorer with the fastest time will be crowned the winner and receive a prize!
                 </p>
                 <div className="mt-6">
@@ -427,10 +427,10 @@ export default function Page() {
          <div className="text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Introduction</h2>
           <div className="bg-white/20 p-8 rounded-lg backdrop-blur-sm max-w-md mx-auto">
-            <p className="text-white mb-4">
+            <p className="text-xl text-white mb-4">
               Without further ado, let’s begin our journey into the world of Next.js — where speed, scalability, and simplicity redefine what's possible in web development.
             </p>
-            <p className="text-white mb-4">
+            <p className="text-xl text-white mb-4">
               Get ready to explore how Next.js empowers developers and transforms ideas into high-performance applications.
             </p>
             <div className="mt-6">
