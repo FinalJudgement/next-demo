@@ -1,5 +1,5 @@
 // ScoreCard.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useLeaderboardStore, formatTime } from '../data/leaderboard';
 
@@ -28,24 +28,64 @@ const ScoreCard = ({ quizResult, questions, name }: ScoreCardProps) => {
 	const passPercentage = 60;
 	const { addEntry } = useLeaderboardStore();
 	const [resultSaved, setResultSaved] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
+	const hasAttemptedSubmission = useRef(false);
 
 	const percentage = (quizResult.score / (questions.length * 5)) * 100;
 	const status = percentage >= passPercentage ? 'Pass' : 'Fail';
 
 	// Save the result to the leaderboard when the component mounts
 	useEffect(() => {
-		if (!resultSaved) {
-			addEntry({
-				name,
-				score: quizResult.score,
-				correctAnswers: quizResult.correctAnswers,
-				wrongAnswers: quizResult.wrongAnswers,
-				completionTimeMs: quizResult.completionTimeMs,
-				completionDate: new Date().toISOString(),
-			});
-			setResultSaved(true);
+		let isMounted = true;
+		
+		// Triple protection against duplicate submissions:
+		// 1. Check state variables
+		// 2. Check ref to ensure we only attempt submission once per component instance
+		// 3. API has duplicate detection
+		if (resultSaved || isSaving || hasAttemptedSubmission.current) {
+			return;
 		}
-	}, [addEntry, name, quizResult, resultSaved]);
+		
+		const saveResult = async () => {
+			try {
+				// Mark that we've attempted submission
+				hasAttemptedSubmission.current = true;
+				setIsSaving(true);
+				
+				// Create a stable unique ID that won't change on re-renders
+				// Use quiz completion details to make it truly unique
+				const uniqueId = `${name}-${quizResult.score}-${quizResult.correctAnswers}-${quizResult.wrongAnswers}-${quizResult.completionTimeMs}`;
+				
+				const uniqueEntry = {
+					name,
+					score: quizResult.score,
+					correctAnswers: quizResult.correctAnswers,
+					wrongAnswers: quizResult.wrongAnswers,
+					completionTimeMs: quizResult.completionTimeMs,
+					completionDate: new Date().toISOString(),
+					uniqueId
+				};
+				
+				await addEntry(uniqueEntry);
+				
+				if (isMounted) {
+					setResultSaved(true);
+				}
+			} catch (error) {
+				console.error("Error saving to leaderboard:", error);
+			} finally {
+				if (isMounted) {
+					setIsSaving(false);
+				}
+			}
+		};
+		
+		saveResult();
+		
+		return () => {
+			isMounted = false;
+		};
+	}, [addEntry, name, quizResult, resultSaved, isSaving]);
 
 	return (
 		<div className='bg-white shadow-md rounded-lg p-6'>
